@@ -25,6 +25,58 @@
       box-shadow: 0 0 15px rgba(150, 0, 255, 0.4), 0 0 25px rgba(128, 0, 255, 0.2);
     }
 
+    /* ===== Loading Screen ===== */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top left, #120024, #220044, #0a0014);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loading-image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #facc15;
+      padding: 5px;
+      box-shadow: 0 0 10px #c084fc, 0 0 25px #facc15;
+      animation: pulse 1.5s infinite alternate;
+      margin-bottom: 15px;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); box-shadow: 0 0 10px #c084fc, 0 0 20px #facc15; }
+      to { transform: scale(1.1); box-shadow: 0 0 25px #facc15, 0 0 40px #c084fc; }
+    }
+
+    .loading-text {
+      font-family: 'Audiowide', cursive;
+      background: linear-gradient(to right, #facc15, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #facc15, 0 0 10px #c084fc; }
+      to { text-shadow: 0 0 10px #f472b6, 0 0 15px #c084fc; }
+    }
+
     .fa-futbol {
       animation: spin 3s linear infinite;
     }
@@ -321,6 +373,12 @@
 
 <body>
 
+  <!-- Loading Screen -->
+  <div id="loader">
+    <img src="dls25.jpg" alt="Loading" class="loading-image" />
+    <div class="loading-text">Loading...</div>
+  </div>
+
   <header class="bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] w-full max-w-md shadow-md py-2 px-3 mx-auto border-b border-purple-500 flex items-center justify-between header-glow rounded-b-2xl">
     <div class="flex items-center space-x-2">
       <img src="dls25.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-purple-500 shadow-md"/>
@@ -482,6 +540,18 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+// ✅ Loader Element
+const loader = document.getElementById("loader");
+
+// ✅ Loader Hide Function
+function hideLoader() {
+  if (loader) {
+    setTimeout(() => {
+      loader.classList.add("hidden");
+    }, 800);
+  }
+}
+
 await setPersistence(auth, browserLocalPersistence);
 
 let teamPhotos = {};
@@ -490,7 +560,7 @@ let currentUserId = null;
 let fixersData = [];
 let countdownInterval = null;
 let activeDocId = null;
-let teamRatings = {}; // ✅ Store ratings from playerlist
+let teamRatings = {};
 
 // ✅ Load team photos + ratings from playerlist
 async function loadTeamPhotosAndRatings() {
@@ -503,6 +573,8 @@ async function loadTeamPhotosAndRatings() {
       if (data.idRating) teamRatings[teamKey] = data.idRating;
     }
   });
+
+  hideLoader(); // ✅ Loaded Successfully -> Hide Loader
 }
 
 // ✅ Balance realtime listener
@@ -544,8 +616,6 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("username").innerText = data.username || user.displayName || "User";
     document.getElementById("userPhoto").src = data.photoUrl || user.photoURL || "default-profile.png";
     hiddenMatchdays = data.hiddenMatchdays || {};
-
-    // ✅ Balance display
     document.getElementById("balance").innerText = `৳${data.balance ?? 0}`;
 
   } else {
@@ -554,8 +624,8 @@ onAuthStateChanged(auth, async (user) => {
     hiddenMatchdays = {};
   }
 
-  subscribeUserBalance(); // ✅ Listen realtime balance
-  await loadTeamPhotosAndRatings();
+  subscribeUserBalance();
+  await loadTeamPhotosAndRatings();  // ✅ Loader hide এখানেই হবে
   subscribeHiddenMatchdays();
   subscribeFixers();
   subscribeBannerStatus();
@@ -578,12 +648,6 @@ function subscribeFixers() {
     snapshot.forEach(docSnap => fixersData.push(docSnap.data()));
     renderFixers();
   });
-}
-
-// ✅ Update Session Display
-function updateSessionDisplay(sessionName) {
-  const sessionDisplay = document.getElementById("sessionDisplslay");
-  if (sessionDisplay) sessionDisplay.textContent = sessionName || "";
 }
 
 // ✅ Banner + Countdown
@@ -617,6 +681,12 @@ function subscribeBannerStatus() {
 
     renderFixers();
   });
+}
+
+// ✅ Update Session Display
+function updateSessionDisplay(sessionName) {
+  const sessionDisplay = document.getElementById("sessionDisplslay");
+  if (sessionDisplay) sessionDisplay.textContent = sessionName || "";
 }
 
 // ✅ Countdown Logic
@@ -667,6 +737,7 @@ function renderFixers() {
   const fixersContainer = document.getElementById("fixers-list");
   if (!fixersData.length) {
     fixersContainer.innerHTML = `<p class="text-center text-gray-400">No fixers available.</p>`;
+    hideLoader(); // ✅ Prevent loader stuck
     return;
   }
 
@@ -675,6 +746,7 @@ function renderFixers() {
 
   if (!todayMatches.length) {
     fixersContainer.innerHTML = `<p class="text-center text-gray-400">No matches scheduled for today.</p>`;
+    hideLoader();
     return;
   }
 
@@ -728,6 +800,7 @@ function renderFixers() {
   });
 
   fixersContainer.innerHTML = html;
+  hideLoader(); // ✅ Finished Rendering → Hide Loader
 }
 
 // ✅ Sidebar toggle
@@ -781,7 +854,6 @@ logoutBtn.addEventListener("click", async () => {
   }
 });
 </script>
-
 
 </body>
 </html>
