@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theme</title>
+
+  <!-- Tailwind & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet" />
+
+  <!-- SweetAlert & Swiper -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <style>
+    body {
+      position: relative;
+      background: radial-gradient(circle at top left, #1a0033, #2d004d, #100020);
+      color: white;
+      min-height: 100vh;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(180, 100, 255, 0.7);
+      border-radius: 50%;
+      animation: moveDots 10s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes moveDots {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-100vh) scale(0.3);
+        opacity: 0;
+      }
+    }
+
+    .header-glow {
+      box-shadow: 0 0 10px rgba(128, 0, 255, 0.5), 0 0 20px rgba(128, 0, 255, 0.3);
+    }
+
+    .glow-card {
+      transition: all 0.3s ease;
+    }
+
+    .glow-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(150, 0, 255, 0.5);
+    }
+
+    .section-glow {
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
+
+    main {
+      margin-top: 3rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    #introVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 9999;
+    }
+
+    #mainContent {
+      display: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #mainContent.show {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Login-Signup Section */
+    #authSection {
+      display: none;
+      margin-top: 4.5rem;
+      animation: slideDown 0.8s ease forwards;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Footer Glow Effect */
+    footer {
+      background: rgba(40, 0, 70, 0.7);
+      border-top: 1px solid rgba(150, 0, 255, 0.4);
+      box-shadow: 0 -2px 10px rgba(150, 0, 255, 0.3);
+      text-align: center;
+      color: #ffb6ff;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 1rem 0.5rem;
+      border-radius: 1rem 1rem 0 0;
+      margin-top: 2rem;
+      z-index: 20;
+    }
+
+    footer span {
+      color: #ffea00;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🎬 Intro Video -->
+  <video id="introVideo" autoplay playsinline>
+    <source src="dls25.mp4" type="video/mp4">
+  </video>
+
+  <!-- 🔥 Main Content -->
+  <div id="mainContent">
+    <script>
+      for (let i = 0; i < 60; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dot.style.left = `${Math.random() * 100}%`;
+        dot.style.bottom = `${Math.random() * 100}%`;
+        dot.style.animationDelay = `${Math.random() * 8}s`;
+        dot.style.animationDuration = `${6 + Math.random() * 6}s`;
+        document.body.appendChild(dot);
+      }
+    </script>
+
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-[#0f001f] via-[#2d004d] to-[#0f001f] w-full max-w-md shadow-md py-2 px-3 mx-auto border border-purple-500 flex items-center justify-between header-glow rounded-full mt-2">
+      <div class="flex items-center space-x-2">
+        <img src="dls25.jpeg" alt="Logo" class="w-8 h-8 rounded-full border-2 border-purple-400 shadow-lg" />
+        <h2
+          class="text-xl font-bold bg-gradient-to-r from-yellow-300 via-pink-200 to-yellow-300 bg-clip-text text-transparent">
+          DCL TOUR
+        </h2>
+      </div>
+      <div class="flex space-x-4">
+        <button id="menuButton">
+          <i class="fa-solid fa-bars text-white text-shadow text-xl"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 🟣 Login & Sign-up Buttons under Header -->
+    <section id="authSection"
+      class="w-full max-w-md bg-gradient-to-br from-purple-900/40 to-black/40 border border-purple-500 rounded-2xl p-4 mx-auto text-center header-glow shadow-lg">
+      <h2 class="text-lg font-bold mb-3 text-pink-300">Join the DCL Community</h2>
+      <div class="flex justify-center gap-4">
+        <button id="loginBtn"
+          class="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-full font-semibold shadow-lg transition">
+          Login
+        </button>
+        <button id="signupBtn"
+          class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-full font-semibold shadow-lg transition">
+          Sign Up
+        </button>
+      </div>
+    </section>
+
+    <main class="flex flex-col justify-center items-center py-2">
+      <img src="dls25.jpeg" alt="Welcome Logo" class="w-20 h-20 rounded-full border-4 border-purple-400 shadow-xl" />
+      <h1
+        class="text-xl font-bold text-center bg-gradient-to-r from-yellow-400 via-pink-300 to-yellow-400 bg-clip-text text-transparent section-glow">
+        WELCOME TO DCL TOUR
+      </h1>
+
+      <!-- Hero Section -->
+      <section
+        class="w-full relative max-w-md mx-auto mt-4 rounded-2xl overflow-hidden shadow-lg border border-purple-500 header-glow">
+        <img src="messi.png" alt="Football Hero" class="w-full h-full object-cover opacity-90">
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6">
+          <h1 class="text-2xl font-extrabold mb-2">Discover All About Football</h1>
+          <p class="text-sm text-gray-300 mb-4">For an even better DCL experience on your mobile device.</p>
+          <div class="flex justify-center items-center">
+            <button id="getStartedBtn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-full w-fit shadow-lg transition">
+              Get Started
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="w-full grid grid-cols-2 gap-4 mt-6">
+        <div class="relative bg-purple-800 bg-opacity-40 rounded-xl p-3 border border-purple-500 glow-card shadow-lg">
+          <div class="absolute top-1 right-1 w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+          <div class="text-center space-y-1">
+            <div
+              class="mx-auto w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-purple-500 via-purple-400 to-purple-700 shadow-md">
+              <i class="fa-solid fa-user-group text-white text-lg"></i>
+            </div>
+            <h2 class="text-lg font-bold text-purple-100">10000+</h2>
+            <p class="text-purple-200 text-sm font-extrabold">Regular Players</p>
+          </div>
+        </div>
+
+        <div class="relative bg-green-900 bg-opacity-30 rounded-xl p-3 border border-green-500 glow-card shadow-lg">
+          <div class="absolute top-1 right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <div class="text-center space-y-1">
+            <div
+              class="mx-auto w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-green-500 via-green-400 to-green-700 shadow-md">
+              <i class="fa-solid fa-coins text-white text-lg"></i>
+            </div>
+            <h2 class="text-lg font-bold text-green-100">20000+</h2>
+            <p class="text-green-200 text-sm font-extrabold">Prize Money</p>
+          </div>
+        </div>
+
+        <div class="relative bg-pink-900 bg-opacity-30 rounded-xl p-3 border border-pink-400 glow-card shadow-lg">
+          <div class="absolute top-1 right-1 w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
+          <div class="text-center space-y-1">
+            <div
+              class="mx-auto w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-pink-500 via-pink-400 to-pink-700 shadow-md">
+              <i class="fa-solid fa-headset text-white text-lg"></i>
+            </div>
+            <h2 class="text-lg font-bold text-pink-100">24/7</h2>
+            <p class="text-pink-200 text-sm font-extrabold">Support</p>
+          </div>
+        </div>
+
+        <div class="relative bg-yellow-700 bg-opacity-20 rounded-xl p-3 border border-yellow-600 glow-card shadow-lg">
+          <div class="absolute top-1 right-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+          <div class="text-center space-y-1">
+            <div
+              class="mx-auto w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-yellow-500 via-yellow-400 to-yellow-600 shadow-md">
+              <i class="fa-solid fa-trophy text-white text-lg"></i>
+            </div>
+            <h2 class="text-lg font-bold text-yellow-100">10+</h2>
+            <p class="text-yellow-400 text-sm font-extrabold">Games & Modes</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- 🌍 About Section -->
+      <section
+        class="w-full max-w-md bg-gradient-to-br from-[#1a0033]/60 to-[#2d004d]/60 border border-purple-600 rounded-2xl p-5 mt-6 text-center shadow-lg header-glow">
+        <h2 class="text-lg font-bold text-yellow-300 mb-2">About DCL Bangladesh</h2>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          DCL Bangladesh is a franchise-based online Dream League Soccer tournament that brings together top players from
+          both Bangladesh and abroad. With a seasonal budget of nearly one lakh Taka, it stands as one of the most
+          competitive and prestigious DLS events in the region.
+        </p>
+      </section>
+    </main>
+
+    <!-- 🌟 Footer -->
+    <footer>
+      © <span>DCL TOUR BD 2025</span> | All Rights Reserved
+    </footer>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDooTNeDHoWUU9nLxYxyBIhewydt7Xl_M0",
+      authDomain: "dlstournament-31ac1.firebaseapp.com",
+      databaseURL: "https://dlstournament-31ac1-default-rtdb.firebaseio.com",
+      projectId: "dlstournament-31ac1",
+      storageBucket: "dlstournament-31ac1.appspot.com",
+      messagingSenderId: "874377019055",
+      appId: "1:874377019055:web:6e38db2ec7f0d541d2de5a",
+      measurementId: "G-0DGFJEV6GL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+  </script>
+
+  <!-- 🎞️ Video to Content Transition + Header Function -->
+  <script>
+    const video = document.getElementById("introVideo");
+    const mainContent = document.getElementById("mainContent");
+    const getStartedBtn = document.getElementById("getStartedBtn");
+    const authSection = document.getElementById("authSection");
+    const menuButton = document.getElementById("menuButton");
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+
+    function playVideoWithSound() {
+      video.muted = false;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          video.onended = () => {
+            video.style.display = "none";
+            mainContent.classList.add("show");
+          };
+        }).catch(() => {
+          video.muted = true;
+          video.play();
+          video.onended = () => {
+            video.style.display = "none";
+            mainContent.classList.add("show");
+          };
+        });
+      }
+    }
+
+    playVideoWithSound();
+
+    // 🌟 Show Login & Signup under header when Get Started clicked
+    getStartedBtn.addEventListener("click", () => {
+      authSection.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // 🌟 menuButton click toggle authSection
+    menuButton.addEventListener("click", () => {
+      authSection.style.display = (authSection.style.display === "block") ? "none" : "block";
+    });
+
+    // 🌟 Login and Signup Redirects
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "login.html";
+    });
+
+    signupBtn.addEventListener("click", () => {
+      window.location.href = "signup.html";
+    });
+  </script>
+</body>
+
+          </html>
