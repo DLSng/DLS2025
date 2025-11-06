@@ -17,6 +17,11 @@
       min-height: 100vh;
     }
 
+    .header-glow {
+      box-shadow: 0 0 15px rgba(150, 0, 255, 0.4), 0 0 25px rgba(128, 0, 255, 0.2);
+    }
+
+    /* ===== Loading Screen ===== */
     #loader {
       position: fixed;
       top: 0;
@@ -43,13 +48,14 @@
       border-radius: 50%;
       border: 3px solid #facc15;
       padding: 5px;
+      box-shadow: 0 0 10px #c084fc, 0 0 25px #facc15;
       animation: pulse 1.5s infinite alternate;
       margin-bottom: 15px;
     }
 
     @keyframes pulse {
-      from { transform: scale(1); }
-      to { transform: scale(1.1); }
+      from { transform: scale(1); box-shadow: 0 0 10px #c084fc, 0 0 20px #facc15; }
+      to { transform: scale(1.1); box-shadow: 0 0 25px #facc15, 0 0 40px #c084fc; }
     }
 
     .loading-text {
@@ -59,6 +65,59 @@
       -webkit-text-fill-color: transparent;
       font-size: 1.2rem;
       letter-spacing: 2px;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #facc15, 0 0 10px #c084fc; }
+      to { text-shadow: 0 0 10px #f472b6, 0 0 15px #c084fc; }
+    }
+
+    .nav-bottom {
+      box-shadow: 0 -2px 20px rgba(120, 0, 255, 0.3);
+    }
+
+    .nav-box {
+      background: rgba(126, 34, 206, 0.25);
+    }
+
+    .nav-item {
+      color: #d0d1d1;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item i {
+      color: #c084fc;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover i {
+      color: #facc15;
+    }
+
+    /* Table Styling */
+    table {
+      background: rgba(20, 0, 40, 0.7);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: linear-gradient(90deg, #3b0764, #581c87, #3b0764);
+      color: #f3e8ff;
+    }
+
+    tbody tr {
+      transition: all 0.2s ease-in-out;
+    }
+
+    tbody tr:hover {
+      background: rgba(234, 179, 8, 0.15);
+      color: #fde68a;
+    }
+
+    td, th {
+      border-color: rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
