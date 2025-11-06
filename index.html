@@ -540,6 +540,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+await setPersistence(auth, browserLocalPersistence);
+
 // ✅ Loader Element
 const loader = document.getElementById("loader");
 
