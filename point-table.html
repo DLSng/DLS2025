@@ -17,70 +17,64 @@
       min-height: 100vh;
     }
 
-    .header-glow {
-      box-shadow: 0 0 15px rgba(150, 0, 255, 0.4), 0 0 25px rgba(128, 0, 255, 0.2);
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top left, #120024, #220044, #0a0014);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
     }
 
-    .nav-bottom {
-      box-shadow: 0 -2px 20px rgba(120, 0, 255, 0.3);
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
     }
 
-    .nav-box {
-      background: rgba(126, 34, 206, 0.25);
+    .loading-image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #facc15;
+      padding: 5px;
+      animation: pulse 1.5s infinite alternate;
+      margin-bottom: 15px;
     }
 
-    .nav-item {
-      color: #d0d1d1;
-      transition: all 0.3s ease;
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
     }
 
-    .nav-item i {
-      color: #c084fc;
-      transition: all 0.3s ease;
-    }
-
-    .nav-item:hover i {
-      color: #facc15;
-    }
-
-    /* Table Styling */
-    table {
-      background: rgba(20, 0, 40, 0.7);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    thead {
-      background: linear-gradient(90deg, #3b0764, #581c87, #3b0764);
-      color: #f3e8ff;
-    }
-
-    tbody tr {
-      transition: all 0.2s ease-in-out;
-    }
-
-    tbody tr:hover {
-      background: rgba(234, 179, 8, 0.15);
-      color: #fde68a;
-    }
-
-    td, th {
-      border-color: rgba(255, 255, 255, 0.1);
+    .loading-text {
+      font-family: 'Audiowide', cursive;
+      background: linear-gradient(to right, #facc15, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
   </style>
 </head>
 <body>
 
+  <!-- ✅ Loading Screen -->
+  <div id="loader">
+    <img src="dls25.jpg" alt="Loading" class="loading-image" />
+    <div class="loading-text">Loading...</div>
+  </div>
+
   <!-- Header -->
-  <header class="bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] w-full max-w-md shadow-md py-2 px-3 mx-auto border-b border-purple-500 flex items-center justify-between header-glow rounded-b-2xl">
+  <header class="bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] w-full max-w-md shadow-md py-2 px-3 mx-auto border-b border-purple-500 flex items-center justify-between rounded-b-2xl">
     <div class="flex items-center space-x-2">
       <img src="dls25.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-purple-500 shadow-md"/>
-      <h2 class="text-xl font-bold bg-gradient-to-r from-yellow-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent" style="font-family: 'Audiowide', cursive;">DSL TOUR</h2>
-    </div>
-    <div>
-      <button id="menuButton">
-        <i class="fa-solid fa-bars text-white text-xl"></i>
-      </button>
+      <h2 class="text-xl font-bold text-transparent bg-gradient-to-r from-yellow-300 via-pink-300 to-yellow-300 bg-clip-text" style="font-family: 'Audiowide', cursive;">DSL TOUR</h2>
     </div>
   </header>
 
@@ -92,39 +86,25 @@
   </main>
 
   <!-- Bottom Navigation -->
-  <nav class="nav-bottom fixed bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] bottom-0 left-0 right-0 flex justify-around items-center py-2 rounded-t-2xl text-white h-16 sm:h-14 sm:px-2 z-50 border-t border-purple-500">
-    <a href="index.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
-      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
-        <i class="fa-solid fa-house text-lg"></i>
-      </div>
-      Home
+  <nav class="fixed bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] bottom-0 left-0 right-0 flex justify-around items-center py-2 rounded-t-2xl text-white h-16 sm:h-14 sm:px-2 z-50 border-t border-purple-500">
+    <a href="index.html" class="flex flex-col items-center text-xs font-semibold">
+      <i class="fa-solid fa-house text-lg"></i> Home
     </a>
-    <a href="shop.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
-      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
-        <i class="fa-solid fa-cart-plus text-lg"></i>
-      </div>
-      DLS Shop
+    <a href="shop.html" class="flex flex-col items-center text-xs font-semibold">
+      <i class="fa-solid fa-cart-plus text-lg"></i> DLS Shop
     </a>
-    <a href="index.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
-      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
-        <i class="fa-solid fa-trophy text-lg"></i>
-      </div>
-      Tour Match
+    <a href="index.html" class="flex flex-col items-center text-xs font-semibold">
+      <i class="fa-solid fa-trophy text-lg"></i> Tour Match
     </a>
-    <a href="team-rank.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
-      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
-        <i class="fa-solid fa-ranking-star text-lg"></i>
-      </div>
-      Ranking
+    <a href="team-rank.html" class="flex flex-col items-center text-xs font-semibold">
+      <i class="fa-solid fa-ranking-star text-lg"></i> Ranking
     </a>
-    <a href="profile.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
-      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
-        <i class="fa-solid fa-user text-lg"></i>
-      </div>
-      Profile
+    <a href="profile.html" class="flex flex-col items-center text-xs font-semibold">
+      <i class="fa-solid fa-user text-lg"></i> Profile
     </a>
   </nav>
 
+  <!-- ✅ FULL JS WITH LOADER FIRESTORE CONTROL -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -140,16 +120,21 @@
       appId: "1:874377019055:web:6e38db2ec7f0d541d2de5a",
       measurementId: "G-0DGFJEV6GL"
     };
-    
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // ✅ loader hide function
+    function hideLoader() {
+      const loader = document.getElementById("loader");
+      loader.classList.add("hidden");
+    }
 
     let photoMap = {};
 
     async function loadPlayersPhotos() {
       const playersSnap = await getDocs(collection(db, "playerlist"));
-      photoMap = {};
       playersSnap.forEach(doc => {
         const data = doc.data();
         if (data.teamName && data.photoUrl) {
@@ -171,6 +156,10 @@
       const pointTablesContainer = document.getElementById("pointTablesContainer");
 
       onSnapshot(collection(db, "fixers"), (snapshot) => {
+
+        // ✅ Firestore data আসলেই loader hide হবে
+        hideLoader();
+
         if (snapshot.empty) {
           pointTablesContainer.innerHTML = `<p class="text-gray-500 text-center">No point tables to show.</p>`;
           return;
@@ -189,7 +178,6 @@
 
         Object.keys(groupsMap).sort().forEach(groupName => {
           const matches = groupsMap[groupName];
-
           const points = {};
           const goals = {};
 
@@ -225,65 +213,50 @@
             points: stat.win * 3 + stat.draw,
             played: stat.win + stat.loss + stat.draw,
             goals: goals[team] || 0,
-          })).sort((a, b) => {
-            if (b.points !== a.points) return b.points - a.points;
-            return b.goals - a.goals;
-          });
+          })).sort((a, b) => b.points - a.points || b.goals - a.goals);
 
           sortedTeams = sortedTeams.slice(0, 4);
-
           allGroupsPoints.push({ groupName, sortedTeams });
         });
 
-        let allPointsHTML = "";
-        if (allGroupsPoints.length === 0) {
-          allPointsHTML = `<p class="text-gray-500 text-center">No point tables to show.</p>`;
-        } else {
-          allPointsHTML = allGroupsPoints.map(({ groupName, sortedTeams }) => `
-            <div class="uppercase mb-3 mt-3 bg-[rgba(22,0,45,0.6)] rounded-sm border border-purple-800 shadow-md ">
-              <div class="mt-2 font-semibold mb-2 text-yellow-400 text-xs uppercase text-center tracking-wide">Point Table - ${groupName}</div>
-              <table class="text-[11px] sm:text-xs w-full table-auto border border-gray-700">
-                <thead>
-                  <tr>
-                    <th class="px-1 py-1 border">Pic</th>
-                    <th class="px-1 py-1 border">Team</th>
-                    <th class="px-1 py-1 border text-center">P</th>
-                    <th class="px-1 py-1 border text-center">W</th>
-                    <th class="px-1 py-1 border text-center">L</th>
-                    <th class="px-1 py-1 border text-center">D</th>
-                    <th class="px-1 py-1 border text-center">G</th>
-                    <th class="px-1 py-1 border text-center">PTS</th>
+        pointTablesContainer.innerHTML = allGroupsPoints.map(({ groupName, sortedTeams }) => `
+          <div class="uppercase mb-3 mt-3 bg-[rgba(22,0,45,0.6)] rounded-sm border border-purple-800 shadow-md ">
+            <div class="mt-2 font-semibold mb-2 text-yellow-400 text-xs uppercase text-center tracking-wide">Point Table - ${groupName}</div>
+            <table class="text-[11px] sm:text-xs w-full table-auto border border-gray-700">
+              <thead>
+                <tr>
+                  <th class="px-1 py-1 border">Pic</th>
+                  <th class="px-1 py-1 border">Team</th>
+                  <th class="px-1 py-1 border text-center">P</th>
+                  <th class="px-1 py-1 border text-center">W</th>
+                  <th class="px-1 py-1 border text-center">L</th>
+                  <th class="px-1 py-1 border text-center">D</th>
+                  <th class="px-1 py-1 border text-center">G</th>
+                  <th class="px-1 py-1 border text-center">PTS</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sortedTeams.map(team => `
+                  <tr class="even:bg-[rgba(60,0,100,0.4)] odd:bg-[rgba(20,0,40,0.4)] hover:bg-yellow-900 hover:text-yellow-300">
+                    <td class="px-1 py-1 border text-center">
+                      <img src="${photoMap[team.team.trim().toLowerCase()] || "dls25.jpg"}" class="inline-block w-6 h-6 rounded-full object-cover border border-purple-500 p-[1px]" />
+                    </td>
+                    <td class="px-1 py-1 border relative">${team.team}</td>
+                    <td class="px-1 py-1 border text-center font-semibold">${team.played}</td>
+                    <td class="px-1 py-1 border text-center">${team.win}</td>
+                    <td class="px-1 py-1 border text-center">${team.loss}</td>
+                    <td class="px-1 py-1 border text-center">${team.draw}</td>
+                    <td class="px-1 py-1 border text-center">${team.goals}</td>
+                    <td class="px-1 py-1 border text-center font-bold">${team.points}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  ${sortedTeams.map((team, index) => {
-                    const photoUrl = photoMap[team.team.trim().toLowerCase()] || "dls25.jpg";
-                    const qualifiedBadge = (team.played === 3 && (index === 0 || index === 1)) 
-                      ? `<span class="absolute -top-0 -right-0 bg-red-600 text-white font-semibold text-[8px] w-2 h-2 flex justify-center items-center rounded-sm">Q</span>` 
-                      : "";
-                    return `
-                      <tr class="even:bg-[rgba(60,0,100,0.4)] odd:bg-[rgba(20,0,40,0.4)] hover:bg-yellow-900 hover:text-yellow-300">
-                        <td class="px-1 py-1 border text-center">
-                          <img src="${photoUrl}" alt="${team.team}" class="inline-block w-6 h-6 rounded-full object-cover border border-purple-500 p-[1px]" />
-                        </td>
-                        <td class="px-1 py-1 border relative">${team.team}${qualifiedBadge}</td>
-                        <td class="px-1 py-1 border text-center font-semibold">${team.played}</td>
-                        <td class="px-1 py-1 border text-center">${team.win}</td>
-                        <td class="px-1 py-1 border text-center">${team.loss}</td>
-                        <td class="px-1 py-1 border text-center">${team.draw}</td>
-                        <td class="px-1 py-1 border text-center">${team.goals}</td>
-                        <td class="px-1 py-1 border text-center font-bold">${team.points}</td>
-                      </tr>
-                    `;
-                  }).join('')}
-                </tbody>
-              </table>
-            </div>
-          `).join('');
-        }
-        pointTablesContainer.innerHTML = allPointsHTML;
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `).join('');
       });
     }
   </script>
+
 </body>
 </html>
