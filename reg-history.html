@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registration History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #0a0018, #180032, #090012);
+      color: #f5f3ff;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+    }
+
+    .header-glow {
+      box-shadow: 0 0 20px rgba(155, 0, 255, 0.4), 0 0 30px rgba(128, 0, 255, 0.2);
+    }
+
+    .nav-bottom {
+      box-shadow: 0 -2px 20px rgba(120, 0, 255, 0.3);
+    }
+
+    .nav-box {
+      background: rgba(126, 34, 206, 0.25);
+    }
+    .nav-item {
+      color: #d0d1d1;
+      transition: all 0.3s ease;
+    }
+    .nav-item i {
+      color: #c084fc;
+      transition: all 0.3s ease;
+    }
+    .nav-item:hover i {
+      color: #facc15;
+    }
+
+    .history-card {
+      background: linear-gradient(135deg, rgba(72,0,120,0.85), rgba(25,0,55,0.9));
+      border: 1px solid rgba(200, 50, 255, 0.4);
+      box-shadow: 0 8px 20px rgba(128,0,255,0.3);
+      transition: all 0.4s ease;
+      padding: 5px 10px;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .history-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, #ff6ec4, #7873f5, #5effc0, #fffa65);
+      animation: rotateGradient 6s linear infinite;
+      opacity: 0.2;
+      z-index: 0;
+      transform-origin: center;
+    }
+
+    @keyframes rotateGradient {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .history-card > .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(200,200,255,0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .history-card > .row:last-child {
+      border-bottom: none;
+    }
+
+    .card-label {
+      color: #d1b3ff;
+      font-weight: 500;
+    }
+
+    .card-value {
+      color: #f5f3ff;
+      font-weight: 600;
+      text-align: right;
+      transition: color 0.3s ease;
+    }
+
+    .text-gradient {
+      background: linear-gradient(to right, #ffcc70, #ff69b4, #d57fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ===== Loading Screen ===== */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top left, #120024, #220044, #0a0014);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loading-image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #facc15;
+      padding: 5px;
+      box-shadow: 0 0 10px #c084fc, 0 0 25px #facc15;
+      animation: pulse 1.5s infinite alternate;
+      margin-bottom: 15px;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(1);
+        box-shadow: 0 0 10px #c084fc, 0 0 20px #facc15;
+      }
+      to {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px #facc15, 0 0 40px #c084fc;
+      }
+    }
+
+    .loading-text {
+      font-family: 'Audiowide', cursive;
+      background: linear-gradient(to right, #facc15, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loader">
+    <img src="dls25.jpg" alt="Loading" class="loading-image" />
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <!-- Header -->
+  <header
+    class="bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] w-full max-w-md shadow-md py-2 px-3 mx-auto border-b border-purple-500 flex items-center justify-between header-glow rounded-b-2xl">
+    <div class="flex items-center space-x-2">
+      <img src="dls25.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-purple-500 shadow-md" />
+      <h2 class="text-xl font-bold bg-gradient-to-r from-yellow-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent"
+        style="font-family: 'Audiowide', cursive;">DSL TOUR</h2>
+    </div>
+    <div>
+      <button id="menuButton">
+        <i class="fa-solid fa-bars text-white text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-grow p-4 md:p-6 mb-20">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-lg font-semibold text-gradient mb-4 text-center">Registration History</h2>
+      <div id="playerList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+        <p class="text-gray-400 text-center col-span-full">Loading...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="nav-bottom fixed bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] bottom-0 left-0 right-0 flex justify-around items-center py-2 rounded-t-2xl text-white h-16 sm:h-14 sm:px-2 z-50 border-t border-purple-500">
+    <a href="index.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-house text-lg"></i>
+      </div>
+      Home
+    </a>
+    <a href="shop.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-cart-plus text-lg"></i>
+      </div>
+      DLS Shop
+    </a>
+    <a href="index.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-trophy text-lg"></i>
+      </div>
+      Tour Match
+    </a>
+    <a href="team-rank.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-ranking-star text-lg"></i>
+      </div>
+      Ranking
+    </a>
+    <a href="profile.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-user text-lg"></i>
+      </div>
+      Profile
+    </a>
+  </nav>
+
+  <!-- Firebase + Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDooTNeDHoWUU9nLxYxyBIhewydt7Xl_M0",
+      authDomain: "dlstournament-31ac1.firebaseapp.com",
+      projectId: "dlstournament-31ac1",
+      storageBucket: "dlstournament-31ac1.appspot.com",
+      messagingSenderId: "874377019055",
+      appId: "1:874377019055:web:6e38db2ec7f0d541d2de5a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const loader = document.getElementById("loader");
+    const playerListDiv = document.getElementById("playerList");
+
+    // 🔹 লগইন ইউজার অনুযায়ী ডেটা ফেচ
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const q = query(collection(db, "reghistory"), where("uid", "==", user.uid));
+        const snapshot = await getDocs(q);
+
+        playerListDiv.innerHTML = "";
+
+        if (snapshot.empty) {
+          playerListDiv.innerHTML = `<p class='text-gray-400 text-center col-span-full'>No registration found.</p>`;
+        } else {
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const dateObj = data.date?.toDate ? data.date.toDate() : new Date(data.date);
+            const formattedDate = formatDate(dateObj);
+
+            const card = `
+              <div class="history-card">
+                <div class="row"><span class="card-label">Team:</span><span class="card-value">${data.teamName}</span></div>
+                <div class="row"><span class="card-label">Id Rating:</span><span class="card-value">${data.idRating}</span></div>
+                <div class="row"><span class="card-label">Session:</span><span class="card-value">${data.sessionName}</span></div>
+                <div class="row"><span class="card-label">Payment:</span><span class="card-value">৳${data.entryFee}</span></div>
+                <div class="row"><span class="card-label">Method:</span><span class="card-value">${data.paymentMethod}</span></div>
+                <div class="row"><span class="card-label">Status:</span>
+                  <span class="card-value font-semibold ${data.status === 'Pending' ? 'text-yellow-400' : data.status === 'Approved' ? 'text-green-400' : 'text-red-400'}">${data.status}</span>
+                </div>
+                <div class="row"><span class="card-label">Date:</span><span class="card-value">${formattedDate}</span></div>
+              </div>
+            `;
+            playerListDiv.innerHTML += card;
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire("Error", "Failed to load history.", "error");
+      } finally {
+        loader.classList.add("hidden");
+      }
+    });
+
+    function formatDate(date) {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const month = monthNames[d.getMonth()];
+      const year = d.getFullYear();
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const seconds = String(d.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      return `${day}, ${month}, ${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #120024, #220044, #0a0014);
+      color: #f5f3ff;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+    }
+
+    .swal2-timer-progress-bar { 
+      background: #facc15 !important; 
+    }
+
+    .header-glow {
+      box-shadow: 0 0 15px rgba(150, 0, 255, 0.4), 0 0 25px rgba(128, 0, 255, 0.2);
+    }
+
+    .nav-bottom {
+      box-shadow: 0 -2px 20px rgba(120, 0, 255, 0.3);
+    }
+
+    .nav-box {
+      background: rgba(126, 34, 206, 0.25);
+    }
+
+    .nav-item {
+      color: #d0d1d1;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item i {
+      color: #c084fc;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover i {
+      color: #facc15;
+    }
+
+    /* ===== Loading Screen ===== */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top left, #120024, #220044, #0a0014);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loading-image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #facc15;
+      padding: 5px;
+      box-shadow: 0 0 10px #c084fc, 0 0 25px #facc15;
+      animation: pulse 1.5s infinite alternate;
+      margin-bottom: 15px;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); box-shadow: 0 0 10px #c084fc, 0 0 20px #facc15; }
+      to { transform: scale(1.1); box-shadow: 0 0 25px #facc15, 0 0 40px #c084fc; }
+    }
+
+    .loading-text {
+      font-family: 'Audiowide', cursive;
+      background: linear-gradient(to right, #facc15, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #facc15, 0 0 10px #c084fc; }
+      to { text-shadow: 0 0 10px #f472b6, 0 0 15px #c084fc; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loader">
+    <img src="dls25.jpg" alt="Loading" class="loading-image" />
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] w-full max-w-md shadow-md py-2 px-3 mx-auto border-b border-purple-500 flex items-center justify-between header-glow rounded-b-2xl mb-4">
+    <div class="flex items-center space-x-2">
+      <img src="dls25.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-purple-500 shadow-md"/>
+      <h2 class="text-xl font-bold bg-gradient-to-r from-yellow-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent" style="font-family: 'Audiowide', cursive;">DSL TOUR</h2>
+    </div>
+    <div>
+      <button id="menuButton">
+        <i class="fa-solid fa-bars text-white text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-3 max-w-md mx-auto w-full space-y-6 pb-24">
+    <!-- Profile Info -->
+    <section class="bg-[#220044] bg-opacity-50 border border-t-4 border-purple-700 rounded-xl p-3 flex items-center gap-4 card-glow">
+      <div id="profileImageContainer" class="w-14 h-14 rounded-full bg-yellow-500 bg-opacity-20 flex items-center justify-center border border-t-4 border-purple-700 shadow-inner">
+        <img id="profileImage" class="w-full h-full rounded-full object-cover" alt="Profile Image" />
+      </div>
+      <div class="flex-1">
+        <h3 id="username" class="text-lg font-bold text-yellow-400">Username</h3>
+        <p id="email" class="hidden text-sm text-yellow-300">user@example.com</p>
+        <div class="flex items-center gap-2 mt-1">
+          <p class="text-xs text-gray-400">USER ID:<span id="userIdDisplay" class="font-bold ml-1"></span></p>
+          <button onclick="copyUserId()" class="text-yellow-400 hover:text-yellow-500 text-xs" title="Copy User ID">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Balance Summary Section -->
+    <section class="bg-[#220044] bg-opacity-50 border border-t-4 border-purple-700 rounded-xl text-center card-glow shadow-lg">
+      <div class="px-4 py-3 space-y-2">
+        <h4 class="text-xs text-gray-400 tracking-widest">AVAILABLE BALANCE</h4>
+        <div class="text-2xl font-bold text-white flex justify-center items-center gap-2">
+          <span>BDT</span>
+          <span id="mainBalance">0</span>
+          <button class="w-6 h-6 rounded-full bg-green-700 text-white flex items-center justify-center text-xs hover:bg-green-600 shadow">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <div class="flex justify-between items-center mt-4 text-white text-sm font-medium">
+          <div class="flex-1 text-center">
+            <p class="text-xs text-gray-400 mb-1">TOUR</p>
+            <p id="totalTour" class="text-lg font-semibold">0</p>
+          </div>
+          <div class="w-px bg-gray-600 h-8 mx-1.5"></div>
+          <div class="flex-1 text-center">
+            <p class="text-xs text-gray-400 mb-1">PLAYED</p>
+            <p id="matchPlayed" class="text-lg font-semibold">0</p>
+          </div>
+          <div class="w-px bg-gray-600 h-8 mx-1.5"></div>
+          <div class="flex-1 text-center">
+            <p class="text-xs text-gray-400 mb-1">WIN</p>
+            <p id="totalWinning" class="text-lg font-semibold">0</p>
+          </div>
+          <div class="w-px bg-gray-600 h-8 mx-1.5"></div>
+          <div class="flex-1 text-center">
+            <p class="text-xs text-gray-400 mb-1">DRAW</p>
+            <p id="totaldraw" class="text-lg font-semibold">0</p>
+          </div>
+          <div class="w-px bg-gray-600 h-8 mx-1.5"></div>
+          <div class="flex-1 text-center">
+            <p class="text-xs text-gray-400 mb-1">LOST</p>
+            <p id="totalLost" class="text-lg font-semibold">0</p>
+          </div>
+          <div class="w-px bg-gray-600 h-8 mx-1.5"></div>
+          <div class="flex-1 text-center">
+            <p class="text-xs text-gray-400 mb-1">GOAL</p>
+            <p id="totalGoal" class="text-lg font-semibold">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="bg-[#220044] bg-opacity-50 border-t border-gray-700 rounded-b-xl p-3 flex justify-between items-center gap-3">
+        <a href="index.html" class="flex-1 bg-green-700 hover:bg-green-700 text-white text-sm font-semibold py-2 rounded-lg flex items-center justify-center gap-2 shadow">
+          <i class="fa-solid fa-circle-down"></i> Deposit
+        </a>
+        <a href="index.html" class="flex-1 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 rounded-lg flex items-center justify-center gap-2 shadow">
+          <i class="fa-solid fa-circle-up"></i> Withdraw
+        </a>
+      </div>
+    </section>
+
+    <!-- More Options -->
+    <section class="bg-[#220044] bg-opacity-50 border border-t-4 border-purple-700 rounded-xl p-4 space-y-3">
+      <h4 class="text-yellow-400 text-center font-semibold text-base mb-2">More Options</h4>
+      <a href="team-setup.html" class="flex items-center justify-between bg-purple-800 hover:bg-purple-700 rounded-lg px-4 py-2 text-white">
+        <span><i class="fa-solid fa-people-group mr-2"></i>Team Setup</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+      <a href="index.html" class="flex items-center justify-between bg-purple-800 hover:bg-purple-700 rounded-lg px-4 py-2 text-white">
+        <span><i class="fa-solid fa-link mr-2"></i>Referral</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+      <a href="https://m.me/j/AbaKcMi10_nTYK4E/" class="flex items-center justify-between bg-purple-800 hover:bg-purple-700 rounded-lg px-4 py-2 text-white">
+        <span><i class="fa-solid fa-headset mr-2"></i>Support</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+      <a href="deposit-history.html" class="flex items-center justify-between bg-purple-800 hover:bg-purple-700 rounded-lg px-4 py-2 text-white">
+        <span><i class="fa-solid fa-wallet mr-2"></i>Deposit History</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+      <a href="withdraw-history.html" class="flex items-center justify-between bg-purple-800 hover:bg-purple-700 rounded-lg px-4 py-2 text-white">
+        <span><i class="fa-solid fa-money-bill-transfer mr-2"></i>Withdraw History</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+      <div class="w-full flex justify-center mt-4">
+        <button onclick="logout()" class="w-1/2 text-center bg-red-600 hover:bg-red-700 rounded-lg px-4 py-2 text-white flex items-center justify-center">
+          <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="nav-bottom fixed bg-gradient-to-r from-[#0a001f] via-[#2d0055] to-[#0a001f] bottom-0 left-0 right-0 flex justify-around items-center py-2 rounded-t-2xl text-white h-16 sm:h-14 sm:px-2 z-50 border-t border-purple-500">
+    <a href="index.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-house text-lg"></i>
+      </div>
+      Home
+    </a>
+    <a href="shop.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-cart-plus text-lg"></i>
+      </div>
+      DLS Shop
+    </a>
+    <a href="index.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-trophy text-lg"></i>
+      </div>
+      Tour Match
+    </a>
+    <a href="team-rank.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-ranking-star text-lg"></i>
+      </div>
+      Ranking
+    </a>
+    <a href="profile.html" class="nav-item flex flex-col items-center text-xs font-semibold no-underline">
+      <div class="nav-box w-9 h-9 rounded-full mb-1 flex items-center justify-center border border-purple-500">
+        <i class="fa-solid fa-user text-lg"></i>
+      </div>
+      Profile
+    </a>
+  </nav>
+
+  <!-- Firebase Scripts -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDooTNeDHoWUU9nLxYxyBIhewydt7Xl_M0",
+    authDomain: "dlstournament-31ac1.firebaseapp.com",
+    databaseURL: "https://dlstournament-31ac1-default-rtdb.firebaseio.com",
+    projectId: "dlstournament-31ac1",
+    storageBucket: "dlstournament-31ac1.appspot.com",
+    messagingSenderId: "874377019055",
+    appId: "1:874377019055:web:6e38db2ec7f0d541d2de5a",
+    measurementId: "G-0DGFJEV6GL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const loader = document.getElementById("loader");
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return window.location.href = "login.html";
+
+    document.getElementById("email").textContent = user.email || "No Email";
+
+    // Users collection
+    const qUsers = query(collection(db, "users"), where("uid", "==", user.uid));
+    onSnapshot(qUsers, (querySnapshot) => {
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        document.getElementById("username").textContent = userData.username || "No Name";
+        document.getElementById("mainBalance").textContent = userData.balance ?? 0;
+        document.getElementById("profileImage").src = userData.photoUrl || 'default-avatar.png';
+        const userId = userData.userId || 'Unavailable';
+        document.getElementById("userIdDisplay").textContent = `${userId}`;
+        document.getElementById("userIdDisplay").setAttribute("data-userid", userId);
+
+        // Hide loader after user data loaded
+        loader.classList.add("hidden");
+      }
+    });
+
+    // playersform collection (stats)
+    const qPlayers = query(collection(db, "playersform"), where("uid", "==", user.uid));
+    onSnapshot(qPlayers, (querySnapshot) => {
+      if (!querySnapshot.empty) {
+        const stats = querySnapshot.docs[0].data();
+        document.getElementById("totalTour").textContent = stats.tour ?? 0;
+        document.getElementById("matchPlayed").textContent = stats.played ?? 0;
+        document.getElementById("totalWinning").textContent = stats.win ?? 0;
+        document.getElementById("totaldraw").textContent = stats.draw ?? 0;
+        document.getElementById("totalLost").textContent = stats.lost ?? 0;
+        document.getElementById("totalGoal").textContent = stats.goal ?? 0;
+      }
+    });
+  });
+
+  window.logout = async () => {
+    await signOut(auth);
+    window.location.href = "login.html";
+  };
+
+  window.copyUserId = () => {
+    const userIdText = document.getElementById("userIdDisplay").getAttribute("data-userid");
+    if (!userIdText) return;
+    navigator.clipboard.writeText(userIdText).then(() => {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'User ID copied!',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        background: '#1a202c',
+        color: '#fff'
+      });
+    });
+  };
+</script>
+
+</body>
+</html>
